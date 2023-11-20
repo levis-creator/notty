@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:notty/controllers/notes.controller.dart';
+import 'package:notty/pages/single_note.dart';
 import 'package:notty/util/media_query.dart';
 import 'package:notty/widgets/header_container.dart';
 import 'package:notty/widgets/note_widget.dart';
@@ -40,7 +41,7 @@ class _HomeState extends State<Home> {
             HeaderContainer(
               size: size,
             ),
-            Expanded(
+            Flexible(
               child: ValueListenableBuilder(
                 valueListenable: Hive.box('notes').listenable(),
                 builder: (BuildContext context, dynamic value, Widget? child) {
@@ -50,15 +51,20 @@ class _HomeState extends State<Home> {
                     return ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
+                      reverse: true,
                       itemCount: _notes.length,
                       itemBuilder: (context, index) {
                         var box = value;
                         var getData = box.getAt(index);
-                        print(getData['createDate']);
                         return NoteWidget(
                           data: getData,
                           index: index,
                           deleteNote: (context) => deleteNotes(index),
+                          onPress: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SingleNote(data: getData))),
                         );
                       },
                     );

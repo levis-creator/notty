@@ -6,7 +6,7 @@ class NotesController {
   var box = Hive.box('notes');
 
   List<dynamic> notesData = [];
-  void createNote(String title, dynamic notes, DateTime createDate) {
+  void createNote(String title, dynamic notes, int createDate) {
     Map newNote = <String, dynamic>{
       "title": title,
       "notes": notes,

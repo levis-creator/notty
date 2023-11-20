@@ -10,14 +10,15 @@ class NoteWidget extends StatelessWidget {
       {super.key,
       required this.data,
       required this.index,
-      required this.deleteNote});
+      required this.deleteNote,
+      required this.onPress});
   final int index;
   Function(BuildContext)? deleteNote;
-
+  VoidCallback onPress;
   Map data = <String, dynamic>{};
 
-  String? dateTime(DateTime date) {
-    var converted = DateTime.parse(date);
+  String dateTime(date) {
+    var converted = DateTime.fromMillisecondsSinceEpoch(date);
     var result = GetTimeAgo.parse(converted);
     return result;
   }
@@ -35,54 +36,60 @@ class NoteWidget extends StatelessWidget {
       ]),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              color: Colors.amber[200],
-              borderRadius: BorderRadius.circular(10)),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        data['title'],
-                        style:
-                            Styles.headLineStyle3.copyWith(color: Colors.black),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                      const Gap(20),
-                      Text(
-                        dateTime(data['createDate']).toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: Styles.headLineStyle3.copyWith(
-                            color: Colors.black45,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ]),
-              ),
-            ),
-            const Column(
+        child: InkWell(
+          onTap: onPress,
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                color: Colors.amber[200],
+                borderRadius: BorderRadius.circular(10)),
+            child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Icon(
-                    Icons.star,
-                    color: Colors.black26,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              data['title'],
+                              style: Styles.headLineStyle3.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                            const Gap(20),
+                            Text(
+                              dateTime(data['createDate']).toString(),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: Styles.headLineStyle3.copyWith(
+                                  color: Colors.black45,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ]),
+                    ),
                   ),
-                  Gap(20),
-                  Icon(
-                    Icons.edit,
-                    color: Colors.black26,
-                  )
+                  const Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.black26,
+                        ),
+                        Gap(20),
+                        Icon(
+                          Icons.edit,
+                          color: Colors.black26,
+                        )
+                      ]),
                 ]),
-          ]),
+          ),
         ),
       ),
     );
